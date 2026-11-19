@@ -28,6 +28,8 @@ const DOSSIER_LIMITS = {
 
 function copyIntoRepoDir(root, outDir) {
   mkdirSync(outDir, { recursive: true });
+  const index = join(root, 'app', 'index.html');
+  if (!existsSync(index)) throw new Error(`missing app entrypoint: ${index}`);
   cpSync(join(root, 'app'), join(outDir, 'app'), { recursive: true });
   mkdirSync(join(outDir, 'screenshots'), { recursive: true });
   const shots = join(root, 'screenshots');

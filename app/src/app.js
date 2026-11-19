@@ -99,10 +99,18 @@ function pickGroup(container, attr, onPick) {
   });
 }
 
+/** Spread the photos that are actually loaded across the panels, cycling. */
+function assignPhotosCycling() {
+  const loaded = state.photos.map((p, i) => (p ? i : -1)).filter((i) => i >= 0);
+  state.panels.forEach((panel, i) => {
+    panel.photo = loaded.length ? loaded[i % loaded.length] : 0;
+  });
+}
+
 pickGroup(document.getElementById('layouts'), 'layout', (layout) => {
   state.layout = layout;
   state.panels = defaultPanels(layout);
-  state.panels.forEach((panel, i) => { panel.photo = Math.min(i, 2); });
+  assignPhotosCycling();
   selected = 0;
   refreshPanelControls();
   redraw();
@@ -227,7 +235,6 @@ async function runShot() {
   if (query.get('layout')) {
     state.layout = query.get('layout');
     state.panels = defaultPanels(state.layout);
-    state.panels.forEach((panel, i) => { panel.photo = Math.min(i, 2); });
     document.querySelectorAll('#layouts .choice').forEach((b) => {
       b.classList.toggle('is-on', b.dataset.layout === state.layout);
     });
@@ -245,6 +252,8 @@ async function runShot() {
     });
   }
   if (shot === 'cover') document.body.classList.add('shot-cover');
+  // Spread the two samples across the panels so the shot shows variety.
+  assignPhotosCycling();
   buildSlots();
   refreshPanelControls();
   redraw();
