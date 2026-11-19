@@ -1,12 +1,179 @@
-html, body { margin: 0; height: 100%; background: #f2f0f4; color: #1d1b22; font: 15px/1.4 system-ui, sans-serif; }
-.app { display: flex; gap: 32px; align-items: center; justify-content: center; height: 100%; padding: 24px; box-sizing: border-box; }
-.controls { display: flex; flex-direction: column; gap: 14px; width: 280px; }
-.controls h1 { margin: 0; font-size: 28px; }
-.controls p { margin: 0; color: #5c5866; }
-label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
-input[type=text] { font: inherit; padding: 8px; border: 1px solid #c9c4d1; border-radius: 6px; }
-button { font: inherit; font-weight: 700; padding: 10px; border: 0; border-radius: 6px; background: #1d1b22; color: #fff; cursor: pointer; }
-canvas { width: min(70vh, 60vw); height: min(70vh, 60vw); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
-body.shot-cover .controls { display: none; }
-body.shot-cover .app { padding: 0; }
-body.shot-cover canvas { width: 100vw; height: 100vh; box-shadow: none; }
+/* Hallmark stamp: Vice Cover · theme: Vice City dusk (custom) · genre: atmospheric · critique: dark workbench, sunset cover carries the colour */
+:root {
+  --ink: #0e0b16;
+  --ink-2: #17101f;
+  --ink-3: #221a30;
+  --line: #332842;
+  --paper: #fff6e8;
+  --muted: #b9aec4;
+  --coral: #ff5a3c;
+  --pink: #ff2e88;
+  --gold: #ffc24b;
+  --teal: #19e3c2;
+  --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Arial Narrow", "HelveticaNeue-CondensedBold", Impact, "Franklin Gothic Medium", sans-serif;
+  --radius: 10px;
+  --gap: 16px;
+}
+html, body { overflow-x: clip; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--paper);
+  font: 15px/1.5 var(--body);
+}
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap);
+  padding: 18px 24px 0;
+  max-width: 1560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.wordmark {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.tagline { margin: 0; color: var(--muted); }
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 18px 24px 28px;
+  box-sizing: border-box;
+  align-items: start;
+}
+.panel {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 6px 18px 18px;
+}
+.group { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.group:last-child { border-bottom: 0; }
+.group h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.hint { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.field input[type="text"], .field select {
+  font: inherit;
+  color: var(--paper);
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 10px;
+}
+.field input[type="range"] { accent-color: var(--gold); }
+.slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+.slot {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  min-height: 74px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  justify-content: center;
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.slot img { width: 100%; height: 52px; object-fit: cover; border-radius: 4px; display: block; }
+.slot .slot-name { font-size: 12px; color: var(--muted); text-align: center; overflow-wrap: break-word; }
+.slot input[type="file"] { display: none; }
+.slot .slot-btn {
+  font: inherit;
+  font-size: 13px;
+  color: var(--paper);
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 6px;
+  cursor: pointer;
+}
+.choice, .sample {
+  font: inherit;
+  font-size: 14px;
+  color: var(--paper);
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.choice.is-on, .sample.is-on {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  font-weight: 700;
+}
+.swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--sw);
+  cursor: pointer;
+  padding: 0;
+}
+.swatch.is-on { border-color: var(--paper); }
+.export {
+  font: inherit;
+  font-weight: 800;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--coral);
+  color: var(--paper);
+  cursor: pointer;
+}
+.status { margin: 10px 0 0; color: var(--muted); font-size: 13px; min-height: 1.4em; }
+.stage { min-width: 0; }
+.stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  cursor: crosshair;
+  background: var(--ink-2);
+}
+.stage-note { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+body.shot-cover .topbar, body.shot-cover .panel, body.shot-cover .stage-note { display: none; }
+body.shot-cover .workbench { display: block; padding: 0; max-width: none; }
+body.shot-cover .stage canvas { width: 100vw; height: 100vh; border-radius: 0; box-shadow: none; object-fit: contain; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none; animation: none; }
+}
+@media (max-width: 900px) {
+  .workbench { grid-template-columns: minmax(0, 1fr); }
+  .topbar { flex-wrap: wrap; }
+}
